@@ -1,0 +1,15 @@
+﻿<div class="panel text-center">
+    @using (Ajax.BeginForm("FilteredRecipes", new { }, new AjaxOptions()
+    {
+        HttpMethod = "Post",
+        UpdateTargetId = "receptPanel",
+        InsertionMode = InsertionMode.Replace,
+    }, new { id = "ajaxForm" }))
+    {
+        <input type="text" name="searchTerm" />
+        <input type="submit" value="Търси" />
+    }
+</div>
+<div id="receptPanel" class="panel">
+    @Html.Action("AllRecipes")
+</div>

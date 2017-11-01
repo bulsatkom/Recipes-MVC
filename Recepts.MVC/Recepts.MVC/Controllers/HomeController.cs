@@ -38,19 +38,7 @@ namespace Recepts.MVC.Controllers
         public ActionResult Index()
         {
             var model = new Home_Index_ViewModel();
-            if (DateTime.Now.TimeOfDay.Hours < 15 && DateTime.Now.TimeOfDay.Hours > 10)
-            {
-                model.Hello = "Добър Ден Предоставяме ви нашето обедно Меню за Денят";
-            }
-            else if (DateTime.Now.TimeOfDay.Hours < 11 && DateTime.Now.TimeOfDay.Hours > 5)
-            {
-                model.Hello = "Добро Утро Предоставяме ви нашето Меню за закуска за Денят";
-            }
-            else
-            {
-                model.Hello = "Добър Вечер Предоставяме ви нашето вечерно Меню за тази вечер";
-            }
-
+          
             var receptofday = this.receptForDayService.GetByDate();
             var latestRecepts = this.receptForDayService.TakeLatestRecepts();
             var mostViewRecepts = this.receptForDayService.TakeMostViewedRecepts();
@@ -153,26 +141,12 @@ namespace Recepts.MVC.Controllers
             return View(model);
         }
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-
         [HttpPost]
         public ActionResult addcomment(Guid id, string Comment)
         {
             this.commentService.AddComment(id, Comment, this.User.Identity.Name);
 
-            return RedirectToAction("Recept", "Home", new { id = id });
+            return RedirectToAction("Recipe", "Home", new { id = id });
         }
 
         public ActionResult Novini()
@@ -236,14 +210,14 @@ namespace Recepts.MVC.Controllers
             return this.View(model);
         }
 
-        public ActionResult Recepts()
+        public ActionResult Recipes()
         {
             return this.View();
         }
 
         [HttpGet]
         [ChildActionOnly]
-        public ActionResult AllRecepts()
+        public ActionResult AllRecipes()
         {            
                 var recepts = this.receptForDayService.TakeAllRecepts().Select(x => new ReceptsFromCategory()
                 {
@@ -257,11 +231,11 @@ namespace Recepts.MVC.Controllers
                     Recepts = recepts
                 };
 
-            return this.PartialView("_FilteredRecepts", model);
+            return this.PartialView("_FilteredRecipes", model);
         }
 
         [HttpPost]
-        public ActionResult FilteredRecepts(string searchTerm)
+        public ActionResult FilteredRecipes(string searchTerm)
         {
             if (string.IsNullOrEmpty(searchTerm))
             {
@@ -277,7 +251,7 @@ namespace Recepts.MVC.Controllers
                     Recepts = recepts
                 };
 
-                return this.PartialView("_FilteredRecepts", model);
+                return this.PartialView("_FilteredRecipes", model);
             }
             else
             {
@@ -294,11 +268,11 @@ namespace Recepts.MVC.Controllers
                     Recepts = recepts
                 };
 
-                return this.PartialView("_FilteredRecepts", model);
+                return this.PartialView("_FilteredRecipes", model);
             }
         }
 
-        public ActionResult Recept(Guid id)
+        public ActionResult Recipe(Guid id)
         {
             var receptbyid = this.receptForDayService.GetByID(id);
             List<ProductsForRecept> products = this.productService.GetProductForReceptById(id).Select(x => new ProductsForRecept()
