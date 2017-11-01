@@ -1,0 +1,105 @@
+﻿@using Microsoft.AspNet.Identity
+@model Recepts.MVC.Models.ReceptsViewModel
+@{
+    var producti = Model.Products;
+    var receptifromsomeCategory = Model.MostViewReceptFromCategory;
+    var commentari = Model.Comments;
+}
+
+<div class="row border4e">
+    <div class="col-md-3">
+        <div class="text-center text-danger">Предложения</div>
+        <br />
+        @foreach (var recept in receptifromsomeCategory)
+        {
+            var idito = recept.Id;
+            <div class="border4e">
+                <div class="text-center text-success">@recept.Title</div>
+                <div class="text-center">
+                    <a href="@Url.Action("Recept","Home", new { id =  idito})"><img alt="@recept.Title" title="@recept.Title" width="150" height="150" src="@recept.Image" /></a>
+                </div>
+            </div>
+                <br />
+        }
+    </div>
+    <div class="col-md-6 border4ehead">
+        <div class="text-center text-info"><h1>@Model.Recept.Title</h1></div>
+        <br />
+        <div class="text-center"><img width="400" height="500" src="@Model.Recept.Image" /></div>
+        <br />
+        <br />
+        <div class="row">
+            <div class="col-md-6">
+                <div class="text-center text-danger">Продукти</div>
+                <div class="row">
+                    <div class="col-md-6">
+                        @foreach (var item in producti)
+                        {
+                            <div>@item.Quantity</div>
+                            <hr />
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        @foreach (var item in producti)
+                        {
+                            <div>@item.Name</div>
+                            <hr />
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="text-center text-danger">Рецепта</div>
+                <div class="text-info">@Model.Recept.Descrption</div>
+            </div>
+        </div>
+        <br />
+        <div class="text-left"><span class="text-warning">Приготвя се за :</span> @Model.Recept.CookingTime минути</div>
+        <div class="text-left"><span class="text-warning">Добавено на :</span> @Model.Recept.Date.Date</div>
+        <div class="text-left"><span class="text-warning">Традиционно Ястие за :</span> @Model.Recept.Kitchen</div>
+        <hr />
+        <div class="text-right text-info">@Model.Recept.Views Преглеждания</div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 text-center">
+        @if(commentari.Count() == 0)
+        {
+            <div class="text-danger">Добавете Първи Коментар за Рецептата</div>
+        }
+        <br />
+
+@if (Request.IsAuthenticated)
+{
+        using (Html.BeginForm("addcomment", "Home", new { id = Model.Recept.Id },FormMethod.Post))
+        {
+            <input type="text" name="Comment" />
+            <input type="submit" value="Submit" />
+        }
+}
+else
+{
+    <div class="text-center"> За Да напишете Коментар Трябва Първо да се логнете</div>
+    @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "btn btn-default" });
+}
+        <br />
+        @foreach (var com in commentari)
+        {
+            <div class="row border4e">
+                <div class="col-md-4">
+                    <div class="text-info">@com.Author</div>
+                    <br />
+                    <div class="text-success">
+                        @com.Date
+                    </div>
+                </div>
+                <div class="col-md-8 text-center text-warning">
+                    <br />
+                    @com.Content
+                </div>
+            </div>
+            <br />
+        }
+    </div>
+</div>

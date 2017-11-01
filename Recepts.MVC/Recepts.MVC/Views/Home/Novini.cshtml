@@ -1,0 +1,23 @@
+﻿@model Recepts.MVC.Models.NoviniViewModel
+    @{ 
+        var novini = Model.Novini;
+    }
+<div class="row">
+    <div class="col-md-3">
+    </div>
+    <div class="col-md-6">
+        <div class="text-center">Новини</div>
+        @foreach (var novina in novini)
+        {
+            var idito = novina.Id;
+            <div class="jumbotron">
+                <div class="text-center text-success">@novina.Title</div>
+                <br />
+                <div class="text-center">
+                    <a href="@Url.Action("Novina","Home", new { id =  idito})"><img alt="@novina.Title" title="@novina.Title" width="300" height="250" src="@novina.Image" /></a>
+                </div>
+            </div>
+            <br />
+        }
+    </div>
+</div>

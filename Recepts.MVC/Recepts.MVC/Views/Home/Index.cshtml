@@ -1,0 +1,205 @@
+﻿@using Resources;
+@{
+    ViewBag.Title = "Home Page";
+}
+
+@model Recepts.MVC.Models.Home_Index_ViewModel
+
+@{
+    Guid idto = Guid.Empty;
+    var ReceptofDayTitle = "";
+    if (Model.ReceptOfDay != null)
+    {
+        idto = Model.ReceptOfDay.Id;
+        ReceptofDayTitle = Model.ReceptOfDay.Title;
+    }
+
+    string kusmet = Model.KusmetOfDay != null ? Model.KusmetOfDay : GlobalResources.kusmetofday;
+    List<Recepts.MVC.Models.Recept_Of_Day> list = Model.LatestRecepts.ToList();
+    List<Recepts.MVC.Models.Recept_Of_Day> listWithMostViewRecepts = Model.MostViewRecepts.ToList();
+    var novini = Model.Novini;
+    var deserti = Model.DessertRecepts;
+    var osnovni = Model.OsnovnoRecepts;
+    var predQstie = Model.PredQstieRecepts;
+    var supi = Model.SupaRecepts;
+}
+
+<div class="row width border4e">
+    <div class="col-md-4">
+        <div class="text-center text-danger">@GlobalResources.happyday</div>
+        <div class="text-center text-info">@kusmet</div>
+    </div>
+    <div class="col-md-4 width border4ehead">
+        <div class="text-center text-danger">@GlobalResources.receptday</div>
+        @if (Model.ReceptOfDay != null)
+        {
+            <div class="col-md-6">
+                <a href="@Url.Action("Recept","Home", new { id = idto })"><img width="150" height="150" src="@Model.ReceptOfDay.Image" /></a>
+            </div>
+            <div class="col-md-6">
+                <span class="text-info">@GlobalResources.type :</span><span class="text-danger">@Model.ReceptOfDay.Type</span>
+                <br />
+                <br />
+                <span class="text-info">@GlobalResources.kitchen :</span><span class="text-danger">@Model.ReceptOfDay.Kitchen</span>
+                <br />
+                <br />
+                <span class="text-info">@GlobalResources.ready :</span><span class="text-danger">@Model.ReceptOfDay.CookingTime минути</span>
+                <br />
+                <br />
+                <br />
+                <br />
+            </div>
+            <div class="row">
+                @Html.ActionLink(ReceptofDayTitle, "Recept", "Home", new { id = idto }, "")
+            </div>
+        }
+        else
+        {
+            @GlobalResources.receptofday;
+        }
+    </div>
+    <div class="col-md-4">
+        <div class="row">
+            <div class="text-center text-danger">@GlobalResources.latestrecept</div>
+            @for (int i = 0; i < list.Count; i++)
+            {
+                var idito = list[i].Id;
+                <div class="col-md-4">
+                    <a href="@Url.Action("Recept","Home", new { id =  idito})"><img alt="@list[i].Title" title="@list[i].Title" width="70" height="55" src="@list[i].Image" /></a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<br />
+<div class="row border4e">
+    <div class="text-center text-danger">@GlobalResources.MostViewedRecipes</div>
+    <hr />
+    @foreach (var item in listWithMostViewRecepts)
+    {
+        var idito = item.Id;
+        <div class="col-md-4 border4eto">
+            <a href="@Url.Action("Recept","Home", new { id =  idito})"><img alt="@item.Title" title="@item.Title" width="240" height="150" src="@item.Image" /></a>
+            <br />
+            <br />
+            <div class="text-info"><a href="@Url.Action("Recept","Home", new { id =  idito})">@item.Title</a></div>
+        </div>
+    }
+</div>
+<br />
+<div class="row">
+    <div class="col-md-3 border4e">
+        <div class="text-center text-danger">@GlobalResources.MostViewedDesserts</div>
+        <br />
+        @foreach (var desert in deserti)
+        {
+            var idito = desert.Id;
+            <div class="border4e">
+                <div class="text-center text-success">@desert.Title</div>
+                <br />
+                <div class="text-center">
+                    <a href="@Url.Action("Recept","Home", new { id =  idito})"><img alt="@desert.Title" title="@desert.Title" width="150" height="150" src="@desert.Image" /></a>
+                </div>
+            </div>
+            <br />
+        }
+        <hr />
+        <div class="text-center text-danger">@GlobalResources.MostViewedSoups</div>
+        <br />
+        @foreach (var supa in supi)
+        {
+            var idito = supa.Id;
+            <div class="border4e">
+                <div class="text-center text-success">@supa.Title</div>
+                <br />
+                <div class="text-center">
+                    <a href="@Url.Action("Recept","Home", new { id =  idito})"><img alt="@supa.Title" title="@supa.Title" width="150" height="150" src="@supa.Image" /></a>
+                </div>
+            </div>
+            <br />
+        }
+    </div>
+    <div class="col-md-6 border4e">
+        <div class="text-center text-danger">@GlobalResources.News</div>
+        <br />
+        @foreach (var novina in novini)
+        {
+            var idito = novina.Id;
+            <div class="border4e">
+                <div class="text-center text-success">@novina.Title</div>
+                <br />
+                <div class="text-center">
+                    <a href="@Url.Action("Novina","Home", new { id =  idito})"><img alt="@novina.Title" title="@novina.Title" width="300" height="250" src="@novina.Image" /></a>
+                </div>
+            </div>
+            <br />
+        }
+    </div>
+    <div class="col-md-3 border4e">
+        <div class="text-center text-danger">@GlobalResources.appetizer</div>
+        <br />
+        @foreach (var predqstie in predQstie)
+            {
+                var idito = predqstie.Id;
+            <div class="border4e">
+                <div class="text-center text-success">@predqstie.Title</div>
+                <br />
+                <div class="text-center">
+                    <a href="@Url.Action("Recept","Home", new { id =  idito})"><img alt="@predqstie.Title" title="@predqstie.Title" width="150" height="150" src="@predqstie.Image" /></a>
+                </div>
+            </div>
+            <br />
+        }
+        <hr />
+        <div class="text-center text-danger">@GlobalResources.Maindishes</div>
+        <br />
+        @foreach (var osnovno in osnovni)
+            {
+                var idito = osnovno.Id;
+            <div class="border4e">
+                <div class="text-center text-success">@osnovno.Title</div>
+                <br />
+                <div class="text-center">
+                    <a href="@Url.Action("Recept","Home", new { id =  idito})"><img alt="@osnovno.Title" title="@osnovno.Title" width="150" height="150" src="@osnovno.Image" /></a>
+                </div>
+            </div>
+            <br />
+        }
+    </div>
+</div>
+@*<div class="jumbotron">
+    <h1>ASP.NET</h1>
+    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
+    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+</div>
+
+<div class="jumbotron">
+    <div class="text-center">
+        <h1>@Model.Hello</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <h2>Getting started</h2>
+        <p>
+            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
+            enables a clean separation of concerns and gives you full control over markup
+            for enjoyable, agile development.
+        </p>
+        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Get more libraries</h2>
+        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
+        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Web Hosting</h2>
+        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
+        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+    </div>
+</div>*@

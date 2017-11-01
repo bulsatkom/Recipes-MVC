@@ -1,0 +1,44 @@
+﻿@model Recepts.MVC.Models.ChatViewModel
+
+@{
+    var comments = Model.Messages;
+}
+
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <h2 class="text-center text-danger">Live Chat</h2>
+        <br />
+        <div class="backgroundchat">
+            <div class="text-center" id="Mesages">
+                @foreach (var message in comments)
+            {
+                    <div>@string.Format("{0} at {1} : {2}", message.Author, message.Date, message.Content);</div>
+                }
+            </div>
+            <input id="MessageInput" type="text" />
+            <button id="MessageSend" class="btn btn-success">SendMessage</button>
+        </div>
+    </div>
+</div>
+
+@section scripts
+    {
+    @Scripts.Render("~/bundles/signalR")
+    <script src="/signalR/hubs"></script>
+
+    <script>
+        $(function () {
+            $.connection.hub.start();
+
+            const chat = $.connection.chat;
+            chat.client.receiveMessage = (msg) => {
+                $('#Mesages').append(msg + '</br>')
+            }
+
+            $('#MessageSend').click(() => {
+                chat.server.sendMessage($('#MessageInput').val())
+            })
+        })
+    </script>
+}

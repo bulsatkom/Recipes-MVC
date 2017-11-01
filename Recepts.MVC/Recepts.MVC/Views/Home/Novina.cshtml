@@ -1,0 +1,58 @@
+﻿@model  Recepts.MVC.Models.NovinaViewModel
+    @{ 
+        var commentari = Model.Comments;
+    }
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <h1 class="text-center text-danger">@Model.novina.Title</h1>
+        <br />
+        <div class="text-center"><img src="@Model.novina.Image" /></div>
+        <br />
+        <div class="text-center">@Model.novina.Description</div>
+        <br />
+        <small class="text-right">@Model.novina.Date</small>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6 text-center">
+        @if (commentari.Count() == 0)
+        {
+            <div class="text-danger">Добавете Първи Коментар за Рецептата</div>
+        }
+        <br />
+
+        @if (Request.IsAuthenticated)
+        {
+            using (Html.BeginForm("addcommentNovina", "Home", new { id = Model.novina.Id }, FormMethod.Post))
+            {
+                <input type="text" name="Comment" />
+                <input type="submit" value="Submit" />
+            }
+        }
+        else
+        {
+            <div class="text-center"> За Да напишете Коментар Трябва Първо да се логнете</div>
+            @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "btn btn-default" });
+        }
+        <br />
+        @foreach (var com in commentari)
+        {
+            <div class="row border4e">
+                <div class="col-md-4">
+                    <div class="text-info">@com.Author</div>
+                    <br />
+                    <div class="text-success">
+                        @com.Date
+                    </div>
+                </div>
+                <div class="col-md-8 text-center text-warning">
+                    <br />
+                    @com.Content
+                </div>
+            </div>
+            <br />
+        }
+    </div>
+</div>

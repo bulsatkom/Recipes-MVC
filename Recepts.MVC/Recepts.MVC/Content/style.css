@@ -1,0 +1,32 @@
+﻿body {
+}
+.primerno{
+    background-color:green;
+    color:white;
+}
+.width{
+    height:200px;
+}
+.imghight{
+    height:200px;
+    width:100px;
+}
+
+.border4e{
+    border: 1px dashed skyblue;
+}
+
+.backgroundchat{
+    background-color:aqua
+}
+
+.border4ehead{
+    border-left: 1px dashed skyblue;
+    border-right: 1px dashed skyblue;
+}
+
+.border4eto{
+    border-top: 1px dashed skyblue;
+    border-left: 1px dashed skyblue;
+    border-right: 1px dashed skyblue;
+}
